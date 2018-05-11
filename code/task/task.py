@@ -4,6 +4,8 @@ from celery import Celery, bootsteps
 from kombu import Consumer, Exchange, Queue
 import logging
 
+from .helpers import say_hello
+
 logger = logging.getLogger(__name__)
 
 exchange = Exchange('pathao-food', type='direct')
@@ -38,8 +40,7 @@ class RestaurantConsumer(bootsteps.ConsumerStep):
                          accept=['json'])]
 
     def handle_message(self, body, message):
-        sleep(10)
-        print(body)
+        print(say_hello(body["args"]))
         message.ack()
 
 celery_app.steps['consumer'].add(OrderConsumer)
